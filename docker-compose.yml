@@ -2,6 +2,7 @@ version: '3'
 name: postgresDB
 services:
   db:
+    container_name: POS-DB-API
     image: postgres:16.6
     restart: always
     ports:
@@ -10,4 +11,4 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - /bd-data:/var/lib/postgresql/data
+      - ./bd-data:/var/lib/postgresql/data
