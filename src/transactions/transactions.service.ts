@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -16,16 +17,21 @@ import {
 import { Between, FindManyOptions, Repository } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
 import { endOfDay, format, isValid, parseISO, startOfDay } from 'date-fns';
+import { CouponsService } from 'src/coupons/coupons.service';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectRepository(Transaction)
     private readonly transactionRepository: Repository<Transaction>,
+
     @InjectRepository(TransactionContents)
     private readonly transactionContentsRepository: Repository<TransactionContents>,
+
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+
+    private readonly couponService: CouponsService,
   ) {}
 
   async create(createTransactionDto: CreateTransactionDto) {
@@ -33,10 +39,25 @@ export class TransactionsService {
       async (transactionEntityManager) => {
         const transaction =
           this.transactionRepository.create(createTransactionDto);
-        const total = createTransactionDto.contents.reduce(
+        let total = createTransactionDto.contents.reduce(
           (acc, item) => acc + item.price * item.quantity,
           0,
         );
+
+        if (createTransactionDto.coupon) {
+          const coupon = await this.couponService.applyCoupon(
+            createTransactionDto.coupon,
+          );
+          const percentage = coupon.percentage / 100;
+
+          const discount = total * percentage;
+
+          // total = +(total - discount).toFixed(2);
+          total = total - discount;
+
+          transaction.discount = discount;
+          transaction.coupon = coupon.name;
+        }
 
         transaction.total = total;
         // const transaction = new Transaction();

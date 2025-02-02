@@ -33,6 +33,19 @@ export class Transaction {
     default: true,
   })
   active: boolean;
+
+  @Column({
+    type: 'varchar',
+    length: 30,
+    nullable: true,
+  })
+  coupon: string;
+  @Column({
+    type: 'decimal',
+    nullable: true,
+    default: 0,
+  })
+  discount: number;
 }
 
 @Entity()
