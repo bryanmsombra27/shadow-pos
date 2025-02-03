@@ -6,6 +6,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { ProductsModule } from './products/products.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { CouponsModule } from './coupons/coupons.module';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CouponsModule } from './coupons/coupons.module';
     ProductsModule,
     TransactionsModule,
     CouponsModule,
+    SwaggerModule,
   ],
   controllers: [],
   providers: [],

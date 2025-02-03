@@ -1,6 +1,19 @@
 version: '3'
-name: postgresDB
+name: shadow-pos-api
 services:
+  shadow-pos:
+    container_name: SHADOW-POS
+    image: shadow-pos
+    ports:
+      - 3000:3000
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: 123456
+      DB_NAME: pos
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      - db
   db:
     container_name: POS-DB-API
     image: postgres:16.6
