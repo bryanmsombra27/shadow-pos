@@ -51,4 +51,13 @@ export class CreateProductDto {
   @IsInt({ message: 'La categoria no es valida' })
   @Min(1, { message: 'debe ser una categoria valida' })
   categoryId: number;
+
+  @ApiProperty({
+    example: '',
+    description: 'Imagen del producto',
+    type: 'string',
+  })
+  @IsNotEmpty({ message: 'El nombre del producto es obligatorio' })
+  @IsString({ message: 'Valor no valido' })
+  image: string;
 }

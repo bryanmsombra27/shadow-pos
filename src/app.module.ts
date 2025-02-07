@@ -7,6 +7,7 @@ import { ProductsModule } from './products/products.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { SwaggerModule } from '@nestjs/swagger';
+import { UploadImageModule } from './upload-image/upload-image.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SwaggerModule } from '@nestjs/swagger';
     TransactionsModule,
     CouponsModule,
     SwaggerModule,
+    UploadImageModule,
   ],
   controllers: [],
   providers: [],
