@@ -90,7 +90,9 @@ export class TransactionsService {
         await transactionEntityManager.save(transactionContents);
       },
     );
-    return 'Venta guardada correctamente!';
+    return {
+      message: 'Venta guardada correctamente!',
+    };
   }
 
   findAll(date: string) {

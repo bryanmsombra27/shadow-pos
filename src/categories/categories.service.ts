@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
 
 @Injectable()
@@ -25,11 +25,25 @@ export class CategoriesService {
     });
   }
 
-  async findOne(id: number) {
-    const category = await this.categoryRepository.findOneBy({
-      id,
-      active: true,
-    });
+  async findOne(id: number, products?: string) {
+    const clause: FindOneOptions<Category> = {
+      where: {
+        active: true,
+        id,
+      },
+    };
+    if (products == 'true') {
+      clause.relations = {
+        products: true,
+      };
+      clause.order = {
+        products: {
+          id: 'DESC',
+        },
+      };
+    }
+
+    const category = await this.categoryRepository.findOne(clause);
 
     if (!category) throw new NotFoundException(`No se encontro la categoria`);
 

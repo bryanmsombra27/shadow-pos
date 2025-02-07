@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseBoolPipe,
+  Optional,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { IdValidationPipe } from '../common/pipes/id-validation/id-validation.pipe';
-import { ApiBody, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 @Controller('categories')
 export class CategoriesController {
@@ -26,7 +29,11 @@ export class CategoriesController {
   @Get()
   @ApiResponse({
     description: 'Obtener todas las categorias',
-    example: {},
+    example: [
+      { id: 1, name: 'Sudaderas', active: true },
+      { id: 2, name: 'Tenis', active: true },
+      { id: 3, name: 'Lentes', active: true },
+    ],
   })
   findAll() {
     return this.categoriesService.findAll();
@@ -38,11 +45,19 @@ export class CategoriesController {
     description: 'Se recibe el id de la categoria ',
     type: Number,
   })
+  @ApiQuery({
+    name: 'products',
+    description:
+      'Por si se requiere traer la relacion de la tabla de productos con respecto al tipo de categoria',
+    type: Boolean,
+  })
   findOne(
     @Param('id', IdValidationPipe)
     id: number,
+    @Query('products')
+    product?: string,
   ) {
-    return this.categoriesService.findOne(id);
+    return this.categoriesService.findOne(id, product);
   }
   @ApiParam({
     name: 'id',

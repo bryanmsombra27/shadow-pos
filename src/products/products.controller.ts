@@ -13,6 +13,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { IdValidationPipe } from '../common/pipes/id-validation/id-validation.pipe';
 import { GetProductsQueryDto } from './dto/get-product.dto';
+import { ApiBody, ApiProperty, ApiQuery } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductsController {
@@ -38,6 +39,21 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @ApiBody({
+    type: UpdateProductDto,
+
+    description: 'propiedades para actualizar un producto',
+    examples: {
+      product: {
+        value: {
+          name: 'camisa',
+          categoryId: 1,
+          inventory: 1,
+          price: 30.99,
+        } as UpdateProductDto,
+      },
+    },
+  })
   update(
     @Param('id', IdValidationPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,

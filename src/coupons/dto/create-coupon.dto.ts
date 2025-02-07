@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
   IsInt,
@@ -8,12 +9,24 @@ import {
 } from 'class-validator';
 
 export class CreateCouponDto {
+  @ApiProperty({
+    name: 'name',
+    type: 'string',
+    description: 'Nombre del cupon',
+    example: 'INAUGURACION',
+  })
   @IsNotEmpty({
     message: 'El nombre del cupon es obligatorio',
   })
   @IsString()
   name: string;
 
+  @ApiProperty({
+    name: 'percentage',
+    type: 'number',
+    description: 'Porcentaje de descuento',
+    example: 20,
+  })
   @IsNotEmpty({
     message: 'El porcentaje es obligatorio',
   })
@@ -22,6 +35,12 @@ export class CreateCouponDto {
   @Min(1, { message: 'No se puede aplicar un descuento menor al 1%' })
   percentage: number;
 
+  @ApiProperty({
+    name: 'expirationDate',
+    type: Date,
+    description: 'Fecha en la que expirara el cupon',
+    example: new Date(),
+  })
   @IsNotEmpty({
     message: 'La fecha es obligatoria',
   })

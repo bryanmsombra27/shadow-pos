@@ -3,7 +3,7 @@ name: shadow-pos-api
 services:
   shadow-pos:
     container_name: SHADOW-POS
-    image: shadow-pos
+    image: shadow-pos:2.3.0
     ports:
       - 3000:3000
     environment:
